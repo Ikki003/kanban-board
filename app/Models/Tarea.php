@@ -40,4 +40,15 @@ class Tarea extends Model
     public function archivos() {
         return $this->hasMany(Archivo::class);
     }
+
+    public function getResponsable() {
+        
+        $user = User::find($this->responsable_id);
+
+        if(!$user) {
+            throw new \Exception("Ha surgido un error");
+        }
+
+        return $user->name;
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TareaController;
 use App\Http\Controllers\ProyectoController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,14 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Welcome.index');
 });
-
-Route::resource('proyectos', ProyectoController::class);
 
 Route::middleware('auth')->group(function () {
     
-    Route::resource('tareas', TareaController::class);
+    // Route::resource('tareas', TareaController::class);
+    Route::resource('proyectos', ProyectoController::class);
+    Route::get('tarea/{tarea}/edit', [TareaController::class, 'edit'])->name('tarea.edit');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

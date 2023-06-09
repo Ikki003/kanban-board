@@ -19,4 +19,5 @@ class TareaController extends Controller
 
         // return view('Tareas.edit', compact('tarea'));
     }
+
 }

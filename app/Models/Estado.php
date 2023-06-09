@@ -26,8 +26,10 @@ class Estado extends Model
     }
 
     public function showTask() {
-        $tasks = $this->getTasks($proyecto_id);
+        $tasks = $this->getTasks($proyecto_id); 
+    }
 
-        
+    public function getTasksCount($id) {
+        return $this->tareas->where('proyecto_id', $id)->count();
     }
 }

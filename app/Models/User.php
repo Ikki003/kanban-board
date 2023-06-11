@@ -50,4 +50,14 @@ class User extends Authenticatable
     public function tareas() {
         return $this->belongsToMany(Tarea::class);
     }
+
+    public function notificationsSent()
+    {
+        return $this->hasMany(Notification::class, 'user_sender_id');
+    }
+
+    public function notificationsReceived()
+    {
+        return $this->hasMany(Notification::class, 'user_receiver_id');
+    }
 }

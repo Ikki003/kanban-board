@@ -5,16 +5,32 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                    <a href="{{ route('proyectos.index') }}">
+                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> --}}
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    <x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.index')">
+                        {{ __('Proyectos') }}
                     </x-nav-link>
+
+                @if (Request::is('proyectos/*'))
+
+                    @php
+                        $proyecto_id = Request::segment(2); // Obtener el segundo segmento de la URL (el ID del proyecto)
+                        $auth_user = auth()->user()->id;
+                    @endphp
+
+                    <button id="newmember" class="bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button">
+                        <i class="fas fa-user mr-1"></i></i> {{ __('Add new member') }}
+                        <input type="hidden" value="{{ $auth_user }}" id="auth_user">
+                    </button>
+                   
+                @endif
+
+
                 </div>
             </div>
 
@@ -67,8 +83,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.index')">
+                {{ __('proyectos.index') }}
             </x-responsive-nav-link>
         </div>
 
@@ -98,3 +114,6 @@
         </div>
     </div>
 </nav>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>

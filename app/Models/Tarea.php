@@ -44,4 +44,8 @@ class Tarea extends Model
     public function encargado() {
         return $this->belongsTo(User::class, 'responsable_id');
     }
+
+    public function updateStatus($estado_id) {
+        $this->estado_id = $estado_id;
+    }
 }

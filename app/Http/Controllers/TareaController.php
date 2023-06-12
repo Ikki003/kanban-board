@@ -20,7 +20,7 @@ class TareaController extends Controller
         // return view('Tareas.edit', compact('tarea'));
     }
 
-    public function update(Tarea $tarea, Request $request) {
+    public function update(Request $request, Tarea $tarea) {
 
         if($request->modo == 'ondrop') {
             $tarea->estado_id = $request->state_id;

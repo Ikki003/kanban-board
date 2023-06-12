@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::post('proyecto/{proyecto}/addmember', [ProyectoController::class, 'addMember'])->name('proyecto.addMember');
 
     Route::resource('tareas', TareaController::class);
+    Route::post('tareas/{tarea}', [TareaController::class, 'update'])->name('tareas.update');
     // Route::get('tarea/{tarea}/edit', [TareaController::class, 'edit'])->name('tarea.edit');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

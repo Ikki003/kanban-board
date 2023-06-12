@@ -20,21 +20,25 @@ class EstadosSeeder extends Seeder
 
         DB::table('estados')->insert([
             'name' => 'Por hacer',
+            'color' => 'bg-yellow-300',
             'created_at' => Carbon::now(),
         ]);
 
         DB::table('estados')->insert([
             'name' => 'En curso',
+            'color' => 'bg-blue-300',
             'created_at' => Carbon::now(),
         ]);
 
         DB::table('estados')->insert([
             'name' => 'En review',
+            'color' => 'bg-purple-300',
             'created_at' => Carbon::now(),
         ]);
 
         DB::table('estados')->insert([
             'name' => 'Finalizada',
+            'color' => 'bg-green-300',
             'created_at' => Carbon::now(),
         ]);
     }

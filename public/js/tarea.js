@@ -24,7 +24,7 @@
                 tarea = data['tarea'];
 
                 setAction(url_update);
-                setMethod("PUT")
+                // setMethod("POST")
                 fillInputs();
                 handleOptions(tarea.estado_id, tarea.prioridad_id);
             }
@@ -48,7 +48,7 @@
         url_create = $("#task_create").val();
 
         setAction(url_create);
-        setMethod("POST")
+        // setMethod("POST")
         handleOptions(estado_id);
     }
 
@@ -103,6 +103,14 @@
         });
     }
 
+    function submitForm(e) {
+        e.preventDefault();
+
+        $form = $("#create_update_task");
+
+        $form.submit();
+    }
+
     function allowDrop(ev) {
         ev.preventDefault();
     }
@@ -111,9 +119,10 @@
         $('#create_update_task').attr('action', url);
     }
 
-    function setMethod(method) {
-        $('#create_update_task').attr('method', method);
-    }
+    // function setMethod(method) {
+    //     $('#create_update_task').attr('method', method);
+    //     $("[name=_method]").val(method);
+    // }
 
     function fillInputs() {
         $("#name").val(tarea.name);

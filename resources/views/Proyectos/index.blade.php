@@ -1,14 +1,4 @@
-<html>
-
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Your Website</title>
-    @vite('resources/css/app.css')
-</head>
-
-<body>
-
-@include('layouts.navigation')
+@include('layouts.app')
 
 <!-- component -->
 <div class="bg-white pt-12 pr-0 pb-12 pl-0 mt-0 mr-auto mb-0 ml-auto sm:py-16 lg:py-20">
@@ -60,7 +50,3 @@
     </div>
   </div>
 </div>
-
-</body>
-
-</html>

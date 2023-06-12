@@ -13,7 +13,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
         </div>
-        <form id="create_update_task" name="create_update_task" action="" method="">
+        <form id="create_update_task" name="create_update_task" action="" method="POST">
             <input type="hidden" id="task_create" value="{{ route('tareas.store') }}">
             <input type="hidden" id="proyecto_id" name="proyecto_id" value="{{ $proyecto_id }}">
             <div class="flex flex-col px-6 py-5 bg-gray-50 overflow-y-auto">
@@ -57,6 +57,7 @@
                     Save
                 </button>
             </div>
+        @method("POST")
         @csrf
         </form>
     </div>

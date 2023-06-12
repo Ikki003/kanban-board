@@ -1,15 +1,3 @@
-<html>
-
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Your Website</title>
-    <script src="/assets/jquery.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    @vite('resources/css/app.css')
-</head>
-
-<body>
-
 @include('layouts.app')
 
 <div class="h-screen p-2">
@@ -54,16 +42,6 @@
 </div>
 
 @include('Proyectos.popup')
-
-
-{{-- href="{{ route('tareas.edit', $tarea->id) }}" --}}
-
-</body>
-
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-
-
-</html>
 
 <script src="/js/tarea.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

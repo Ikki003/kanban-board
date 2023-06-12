@@ -32,7 +32,7 @@ class NotificacionController extends Controller
             $project = Proyecto::findOrFail($request->proyecto_id_join);
             $project_name = $project->name;
 
-            $notificacion->message = __("$sender_name te ha invitado a su proyecto");
+            $notificacion->message = __("$sender_name te ha invitado al proyecto '$project_name'");
             $notificacion->user_sender_id = $request->auth_user;
             $notificacion->user_receptor_id = $request->user_receptor;
             $notificacion->project_id = $request->proyecto_id_join;

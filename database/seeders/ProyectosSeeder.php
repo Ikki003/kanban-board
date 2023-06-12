@@ -40,15 +40,5 @@ class ProyectosSeeder extends Seeder
             'created_at' => Carbon::now(),
         ]);
 
-        DB::table('prioridades')->insert([
-            'name' => 'Media',
-            'created_at' => Carbon::now(),
-        ]);
-
-        DB::table('prioridades')->insert([
-            'name' => 'Alta',
-            'created_at' => Carbon::now(),
-        ]);
-
     }
 }

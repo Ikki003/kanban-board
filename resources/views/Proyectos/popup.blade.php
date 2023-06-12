@@ -1,5 +1,9 @@
 {{-- Popup1 --}}
 
+@php
+    $proyecto_id = Request::segment(2);
+@endphp
+
 <div class="fixed inset-0 flex items-center justify-center z-50 hidden" id="popup">
     <div class="fixed inset-0 bg-black opacity-50"></div>
     <div class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl bg-white z-10" style="max-height: 80vh; pointer-events: auto">
@@ -9,7 +13,9 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
         </div>
-        <form id="updateTask" name="updateTask" action="" method="POST">
+        <form id="create_update_task" name="create_update_task" action="" method="">
+            <input type="hidden" id="task_create" value="{{ route('tareas.store') }}">
+            <input type="hidden" id="proyecto_id" name="proyecto_id" value="{{ $proyecto_id }}">
             <div class="flex flex-col px-6 py-5 bg-gray-50 overflow-y-auto">
 
                 <div class="w-full mt-2 sm:mt-0">
@@ -51,17 +57,16 @@
                     Save
                 </button>
             </div>
-        @method("PUT")
         @csrf
         </form>
     </div>
 </div>
 
-{{-- Ppopup2 --}}
+{{-- Popup2 --}}
 
 <div class="fixed inset-0 flex items-center justify-center z-50 hidden mb-20" id="popup2">
     <div class="fixed inset-0 bg-black opacity-50"></div>
-    <div class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl bg-white z-10" style="max-height: 80vh; pointer-events: auto">
+    <div class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl bg-white z-10 overflow-y-auto" style="max-height: 80vh; pointer-events: auto">
         <div class="flex flex-row justify-between p-6 bg-white border-b border-gray-200 rounded-tl-lg rounded-tr-lg">
             <p class="font-semibold text-gray-800" id="adduser"></p>
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onclick="closeModal()">
@@ -84,5 +89,7 @@
             </div>
         </div>
         <div id="userlist"></div>
+        <input type="hidden" name="url_send_notification" value="{{ route('notification.sendNotification') }}">
+        <input type="hidden" name="token_send_notification" value="{{ csrf_token() }}">
     </div>
 </div>

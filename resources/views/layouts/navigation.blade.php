@@ -12,20 +12,26 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+
                     <x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.index')">
                         {{ __('Proyectos') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('notifications.index')" :active="request()->routeIs('notifications.index')">
+                        {{ __('Notificaciones') }}
                     </x-nav-link>
 
                 @if (Request::is('proyectos/*'))
 
                     @php
-                        $proyecto_id = Request::segment(2); // Obtener el segundo segmento de la URL (el ID del proyecto)
+                        $proyecto_id = Request::segment(2);
                         $auth_user = auth()->user()->id;
                     @endphp
 
                     <button id="newmember" class="bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button">
                         <i class="fas fa-user mr-1"></i></i> {{ __('Add new member') }}
                         <input type="hidden" value="{{ $auth_user }}" id="auth_user">
+                        <input type="hidden" value="{{ $proyecto_id }}" id="proyecto_id_join">
                     </button>
                    
                 @endif

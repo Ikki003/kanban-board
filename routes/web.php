@@ -33,11 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('proyectos', ProyectoController::class);
     Route::post('proyecto/{proyecto}/addmember', [ProyectoController::class, 'addMember'])->name('proyecto.addMember');
 
-    Route::resource('tareas', TareaController::class)->names([
-        'edit' => 'tarea.edit',
-        'update' => 'tarea.update',
-        'show' => 'tarea.show',
-    ]);
+    Route::resource('tareas', TareaController::class);
     // Route::get('tarea/{tarea}/edit', [TareaController::class, 'edit'])->name('tarea.edit');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -45,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/getusers', [UserController::class, 'getUsers'])->name('user.getUsers');
 
+    Route::get('notifications', [NotificacionController::class, 'index'])->name('notifications.index');
     Route::post('/sendnotification', [NotificacionController::class, 'sendNotification'])->name('notification.sendNotification');
 });
 

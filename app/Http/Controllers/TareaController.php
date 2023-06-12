@@ -31,6 +31,22 @@ class TareaController extends Controller
 
         $tarea->update($request->all());
 
+        return redirect()->back();   
+        
+    }
+
+    public function store(Request $request) {
+
+        $tarea = new Tarea;
+        $tarea->name = $request->name;
+        $tarea->description = $request->description;
+        $tarea->estado_id = $request->estado_id;
+        $tarea->prioridad_id = $request->prioridad_id;
+        $tarea->proyecto_id = $request->proyecto_id;
+        $tarea->responsable_id = auth()->user()->id;
+        $tarea->save();
+        // $tarea->create($request->all());
+
         return redirect()->back();
         
         

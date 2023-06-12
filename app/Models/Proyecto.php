@@ -25,6 +25,11 @@ class Proyecto extends Model
         return $this->hasMany(Tarea::class);
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     public function getUsers() {
         $proyecto = Proyecto::findOrFail($this->id);
         return $proyecto->usuarios()->pluck('name');

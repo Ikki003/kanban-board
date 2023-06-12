@@ -26,10 +26,15 @@ class Notificacion extends Model
 
     public function receiver()
     {
-        return $this->belongsTo(User::class, 'user_receiver_id');
+        return $this->belongsTo(User::class, 'user_receptor_id');
     }
 
-    public function estadNotificacion() {
+    public function project()
+    {
+        return $this->belongsTo(Proyecto::class, 'project_id');
+    }
+
+    public function estadoNotificacion() {
         return $this->belongsTo(EstadoNotificacion::class);
     }
 }

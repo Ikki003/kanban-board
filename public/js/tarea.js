@@ -1,7 +1,9 @@
     movedElement = null;
     tarea = null;
     url_update = "";
+    url_create = "";
     auth_user = null;
+    proyecto_id_join = null;
 
     function openPopup(este) {
         let id_tarea = $(este).data('id');
@@ -21,7 +23,8 @@
 
                 tarea = data['tarea'];
 
-                setAction();
+                setAction(url_update);
+                setMethod("PUT")
                 fillInputs();
                 handleOptions(tarea.estado_id, tarea.prioridad_id);
             }
@@ -32,10 +35,20 @@
         });
     }
 
+    // function submitPopUp() {
+    //     $form = $("#create_update_task");
+
+    //     console.log($form);
+    //     debugger;
+    // }
+
     function openCreate(estado_id) {
         $('#popup').removeClass('hidden');
-        $("#name_title").text('Crear nueva tarea')
+        $("#name_title").text('Crear nueva tarea');
+        url_create = $("#task_create").val();
 
+        setAction(url_create);
+        setMethod("POST")
         handleOptions(estado_id);
     }
 
@@ -71,13 +84,6 @@
         url_update = movedElement.children().val();
         let token = movedElement.children().attr('token');
 
-
-        // url = "{{ route('tarea.update', ['tarea' => ':task_id']) }}";
-        // url = url.replace(':task_id', task_id);
-
-        // console.log(url);
-        // debugger;
-
         $.ajax({
             type: "PUT",
             url: url_update,
@@ -101,8 +107,12 @@
         ev.preventDefault();
     }
 
-    function setAction() {
-        $('#updateTask').attr('action', url_update);
+    function setAction(url) {
+        $('#create_update_task').attr('action', url);
+    }
+
+    function setMethod(method) {
+        $('#create_update_task').attr('method', method);
     }
 
     function fillInputs() {
@@ -138,6 +148,7 @@
         $("#newmember").click(() => {
             $("#popup2").removeClass('hidden');
             auth_user = $("#auth_user").val();
+            proyecto_id_join = $("#proyecto_id_join").val();
         })
 
         $("#search_user").click((e) => {
@@ -191,11 +202,11 @@
                         "  </div>\n" +
                         "   <button type='text' class='bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ml-4 ease-linear transition-all duration-150' id='request_user'> Mandar Solicitud</button>\n" +
                         "  </div>\n" +
-                        "  <input type='hidden' value=':user_id' id='user_id'\n" +
-                        "  <input type='hidden' value='{{ route('notification.sendNotification') }} id='url_send_notification'\n" +
-                        "  <input type='hidden' value='{{ csrf_token() }} id='token_send_notification'\n";
+                        "  <input type='hidden' value=':user_id' name='user_id'>\n";
 
-                        html = html.replace(':nombre', user.name).replace(':correo', user.email).replace(':user_id', user.id);
+                        html = html.replace(':nombre', user.name)
+                            .replace(':correo', user.email)
+                            .replace(':user_id', user.id)
 
                         $("#userlist").append(html);
                     })
@@ -203,29 +214,30 @@
             });
         })
 
-        $("#request_user").click((e) => {
+        $(document).on("click", "#userlist", function(event) {
+            if ($(event.target).is("#request_user")) {
+                let url_send_notification = $("[name=url_send_notification]").val();
+                let token = $("[name=token_send_notification]").val();
+                let user_receptor = $("[name=user_id]").val();
 
-            let url_send_notification = $("#url_send_notification").val();
-            let token = $("#token_send_notification").val();
-            let user_receptor = $("#user_id").val();
-
-            console.log(url_send_notification, token, user_receptor);
-            $.ajax({
-                type: "POST",
-                url: url_send_notification,
-                data: {
-                    'modo' : 'joinproject',
-                    'user_receptor' : user_receptor,
-                    'auth_user' : auth_user,
-                    '_token': token,
-                },
-                success: function(data){
-                
-                    if(data['ok'] == true) {
-                        location.reload();
-                    }
-    
-                },
-            });
-        })
+                $.ajax({
+                    type: "POST",
+                    url: url_send_notification,
+                    data: {
+                        'modo' : 'joinproject',
+                        'user_receptor' : user_receptor,
+                        'auth_user' : auth_user,
+                        'proyecto_id_join' : proyecto_id_join,
+                        '_token': token,
+                    },
+                    success: function(data){
+                    
+                        if(data['ok'] == true) {
+                            location.reload();
+                        }
+        
+                    },
+                });
+            }
+        });
     });

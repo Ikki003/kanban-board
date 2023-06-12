@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_sender_id');
             $table->unsignedBigInteger('user_receptor_id');
             $table->unsignedBigInteger('estado_notificacion_id');
+            $table->unsignedBigInteger('project_id');
             $table->softDeletes();
             $table->timestamps();
         });

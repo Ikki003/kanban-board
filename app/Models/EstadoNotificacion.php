@@ -12,6 +12,10 @@ class EstadoNotificacion extends Model
 
     protected $table = 'estados_notificaciones';
 
+    const ESTADO_PENDIENTE = 1;
+    const ESTADO_ACEPTADA = 2;
+    const ESTADO_CANCELADA = 3;
+
     protected $guarded = [
         'id',
         'created_at',

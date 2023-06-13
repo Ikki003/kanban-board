@@ -2,25 +2,50 @@
 
 namespace App\Http\Controllers;
 use App\Models\Tarea;
+use App\Models\Proyecto;
+use App\Models\Estado;
+use App\Models\Prioridad;
 
 use Illuminate\Http\Request;
 
 class TareaController extends Controller
 {
-    public function edit(Tarea $tarea) {
+
+    public function index(Proyecto $proyecto) {
+        $tareas = $proyecto->tareas;
+
+        $estados = Estado::all();
+        $prioridades = Prioridad::all();
+
+        return view('Tareas.index', compact('tareas', 'estados', 'proyecto', 'prioridades'));
+    }
+
+    public function edit($id) {
+
+        $tarea = Tarea::findOrFail($id);
+        $estados = Estado::all();
+        $prioridades = Prioridad::all();
 
         if(!$tarea) {
             return null;
         }
 
+        // return view('Tareas.edit', compact('tarea', 'estados', 'prioridades'));
+
         return [
-            'tarea' => $tarea
+            'tarea' => $tarea,
         ];
+
+        // return [
+        //     'tarea' => $tarea
+        // ];
 
         // return view('Tareas.edit', compact('tarea'));
     }
 
-    public function update(Request $request, Tarea $tarea) {
+    public function update(Request $request) {
+
+        $tarea = Tarea::findOrFail($request->task_id);
 
         if($request->modo == 'ondrop') {
             $tarea->estado_id = $request->state_id;
@@ -54,6 +79,11 @@ class TareaController extends Controller
 
     public function show(Tarea $tarea) {
 
+    }
+
+
+    public function setTime(Request $request) {
+        
     }
 
 }

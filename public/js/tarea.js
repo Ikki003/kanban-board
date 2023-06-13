@@ -4,13 +4,17 @@
     url_create = "";
     auth_user = null;
     proyecto_id_join = null;
+    id_tarea = null;
 
-    function openPopup(este) {
-        let id_tarea = $(este).data('id');
-        let id_proyecto = $(este).data('id2');
+    function openPopup() {
+        // tarea = $(este).data('tarea');
+        // let id_proyecto = $(este).data('id2');
 
-        let url = $(este).find("[name='url_edit']").val();
-        url_update = $(este).find("[name='url_update']").val();
+        var url = $("[name='url_edit']").val();
+
+        $("#show_hours").click(() => {
+            $("#popup3").removeClass('hidden');
+        });
 
         $.ajax({
             type: "GET",
@@ -19,7 +23,9 @@
             success: function(data){
 
             if(data['tarea']) {
+                // $('#contenedor').html(data);
                 $('#popup').removeClass('hidden');
+                // $('#popup').removeClass('hidden');
 
                 tarea = data['tarea'];
 
@@ -33,6 +39,10 @@
 
             }
         });
+    }
+
+    function handleTime() {
+
     }
 
     // function submitPopUp() {
@@ -50,10 +60,14 @@
         setAction(url_create);
         // setMethod("POST")
         handleOptions(estado_id);
+
+        $("#show_hours").click(() => {
+            $("#popup3").removeClass('hidden');
+        });
     }
 
-    function closeModal() {
-        $('#popup').addClass('hidden');
+    function closeModal(modal) {
+        $(modal).addClass('hidden');
         location.reload();
     }
 
@@ -81,8 +95,8 @@
         let state_id = target.data('id');
         let task_id = movedElement.data('id');
 
-        url_update = movedElement.children().val();
-        let token = movedElement.children().attr('token');
+        url_update = $("[name=url_update]").val();
+        let token = $("[name=url_update]").attr('token');
 
         $.ajax({
             type: "PUT",

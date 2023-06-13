@@ -33,7 +33,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('proyectos', ProyectoController::class);
     Route::post('proyecto/{proyecto}/addmember', [ProyectoController::class, 'addMember'])->name('proyecto.addMember');
 
-    Route::resource('tareas', TareaController::class);
+    Route::resource('proyectos.tareas', TareaController::class);
+    Route::post('proyectos/{proyecto}/tareas/{tarea}/createtime', [TareaController::class, 'setTime'])->name('proyectos.tareas.createTime');
+    Route::post('proyectos/{proyecto}/tareas/{tarea}/settime', [TareaController::class, 'setTime'])->name('proyectos.tareas.setTime');
+
     Route::post('tareas/{tarea}', [TareaController::class, 'update'])->name('tareas.update');
     // Route::get('tarea/{tarea}/edit', [TareaController::class, 'edit'])->name('tarea.edit');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

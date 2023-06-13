@@ -5,6 +5,7 @@
     auth_user = null;
     proyecto_id_join = null;
     id_tarea = null;
+    proyecto_id = null;
 
     function openPopup() {
         // tarea = $(este).data('tarea');
@@ -12,14 +13,13 @@
 
         var url = $("[name='url_edit']").val();
 
-        $("#show_hours").click(() => {
+        $("[name=register_time]").click(() => {
             $("#popup3").removeClass('hidden');
         });
 
         $.ajax({
             type: "GET",
             url: url,
-            data: id_tarea,
             success: function(data){
 
             if(data['tarea']) {
@@ -29,10 +29,20 @@
 
                 tarea = data['tarea'];
 
+                id_tarea = tarea.id;
+                
+                proyecto_id = data['proyecto_id'];
+                
+                $("#tarea_id").val(id_tarea);
+
+                url_update = "/proyectos/:proyecto_id/tareas/:tarea_id";
+                url_update = url_update.replace(':proyecto_id', proyecto_id).replace(':tarea_id', id_tarea);
+
                 setAction(url_update);
                 // setMethod("POST")
                 fillInputs();
                 handleOptions(tarea.estado_id, tarea.prioridad_id);
+
             }
             },
             error: function(){
@@ -42,6 +52,35 @@
     }
 
     function handleTime() {
+
+        let hours = $("#hours").val();
+        let pattern = /^(?:\d+w)?(?:\d+d)?(?:\d+h)?(?:\d+m)?$/;
+
+        var regex = /(\d+)h(\d+)m/;
+        var match = regex.exec(hours);
+
+        if (match) {
+            hours = parseInt(match[1]);
+            minutes = parseInt(match[2]);
+
+            while (minutes/60 >= 1) {
+                minutes -= 60;
+                hours++;
+              }
+        }
+
+        if(!hours.match(pattern) || hours>99) {
+            $("#error_hours").text("Ha surgido un error");
+            $("#hours").val('');
+            return;
+        }
+
+        let url_set_time = "/proyectos/"+proyecto_id+"/tareas/"+id_tarea+"/settime";
+        $("#set_time_form").attr('action', url_set_time);
+
+
+        $form = $("#set_time_form");
+        $form.submit();
 
     }
 
@@ -66,9 +105,16 @@
         });
     }
 
-    function closeModal(modal) {
-        $(modal).addClass('hidden');
-        location.reload();
+    function closeModal(id_modal) {
+
+        let modal = $("" + '#' + id_modal + "");
+        modal.addClass('hidden');
+
+        if(id_modal = 'popup3') {
+            $("#hours").val('');
+        } else {
+            location.reload();
+        }
     }
 
     function drag(ev) {
@@ -117,13 +163,13 @@
         });
     }
 
-    function submitForm(e) {
-        e.preventDefault();
+    // function submitForm(e) {
+    //     e.preventDefault();
 
-        $form = $("#create_update_task");
+    //     $form = $("#create_update_task");
 
-        $form.submit();
-    }
+    //     $form.submit();
+    // }
 
     function allowDrop(ev) {
         ev.preventDefault();

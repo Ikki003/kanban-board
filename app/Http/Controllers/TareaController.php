@@ -5,7 +5,8 @@ use App\Models\Tarea;
 use App\Models\Proyecto;
 use App\Models\Estado;
 use App\Models\Prioridad;
-
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 
 class TareaController extends Controller
@@ -30,29 +31,23 @@ class TareaController extends Controller
             return null;
         }
 
-        // return view('Tareas.edit', compact('tarea', 'estados', 'prioridades'));
-
         return [
             'tarea' => $tarea,
+            'proyecto_id' => $tarea->proyecto->id,
         ];
-
-        // return [
-        //     'tarea' => $tarea
-        // ];
-
-        // return view('Tareas.edit', compact('tarea'));
     }
 
     public function update(Request $request) {
 
-        $tarea = Tarea::findOrFail($request->task_id);
-
         if($request->modo == 'ondrop') {
+            $tarea = Tarea::findOrFail($request->task_id);
             $tarea->estado_id = $request->state_id;
             $tarea->save();
             
             return response()->json(['ok'=>true]);
         }
+
+        $tarea = Tarea::findOrFail($request->tarea_id);
 
         $tarea->update($request->all());
 
@@ -83,7 +78,23 @@ class TareaController extends Controller
 
 
     public function setTime(Request $request) {
+
+        $time = $request->hours;
+
+        $interval = CarbonInterval::fromString($time);
+        $seconds = $interval->total('seconds');
         
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        $seconds = $seconds % 60;
+        
+        $carbon = Carbon::createFromTime($hours, $minutes, $seconds);
+        // Extraer los componentes del tiempo
+
+        var_dump($carbon->toTimeString());
+
+        
+
     }
 
 }

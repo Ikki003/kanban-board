@@ -16,15 +16,15 @@ class ProyectoController extends Controller
         return view('Proyectos.index', compact('proyectos'));
     }
 
-    public function show(Proyecto $proyecto) {
+    // public function show(Proyecto $proyecto) {
 
-        $tareas = $proyecto->tareas;
+    //     $tareas = $proyecto->tareas;
 
-        $estados = Estado::all();
-        $prioridades = Prioridad::all();
+    //     $estados = Estado::all();
+    //     $prioridades = Prioridad::all();
 
-        return view('Proyectos.show', compact('tareas', 'estados', 'proyecto', 'prioridades'));
-    }
+    //     return view('Proyectos.show', compact('tareas', 'estados', 'proyecto', 'prioridades'));
+    // }
 
     public function addMember() {
         

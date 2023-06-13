@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::post('proyecto/{proyecto}/addmember', [ProyectoController::class, 'addMember'])->name('proyecto.addMember');
 
     Route::resource('proyectos.tareas', TareaController::class);
+    Route::post('proyectos/{proyecto}/tareas/{tarea}/', [TareaController::class, 'update'])->name('proyectos.tareas.update');
     Route::post('proyectos/{proyecto}/tareas/{tarea}/createtime', [TareaController::class, 'setTime'])->name('proyectos.tareas.createTime');
     Route::post('proyectos/{proyecto}/tareas/{tarea}/settime', [TareaController::class, 'setTime'])->name('proyectos.tareas.setTime');
 

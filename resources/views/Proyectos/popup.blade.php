@@ -1,10 +1,6 @@
 @php
-    use App\Models\Tarea;
-
     $proyecto_id = Request::segment(2);
     $tarea_id = Request::segment(4);
-
-    $tarea = Tarea::find($tarea_id);
 @endphp
 
 {{-- Popup1 --}}
@@ -14,13 +10,14 @@
     <div class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl bg-white z-10" style="max-height: 80vh; pointer-events: auto">
         <div class="flex flex-row justify-between p-6 bg-white border-b border-gray-200 rounded-tl-lg rounded-tr-lg">
             <p class="font-semibold text-gray-800" id="name_title"></p>
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onclick="closeModal(this)">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onclick="closeModal('popup')">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
         </div>
-        <form id="create_update_task" name="create_update_task" action="{{ route('proyectos.tareas.update', ['proyecto' => $proyecto->id, 'tarea' => $tarea->id]) }}" method="POST">
+        <form id="create_update_task" name="create_update_task" action="" method="POST">
             <input type="hidden" id="task_create" value="{{ route('proyectos.tareas.store', ['proyecto' => $proyecto_id]) }}">
             <input type="hidden" id="proyecto_id" name="proyecto_id" value="{{ $proyecto_id }}">
+            <input type="hidden" id="tarea_id" name="tarea_id" value="">
             <div class="flex flex-col px-6 py-5 bg-gray-50 overflow-y-auto">
 
                 <div class="w-full mt-2 sm:mt-0">
@@ -48,7 +45,7 @@
 
                     <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
                         <p class="mb-2 font-semibold text-gray-700">{{ __('Prioridad') }}</p>
-                        <select type="text"  name="prioridad_id" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none" id="">
+                        <select type="text" name="prioridad_id" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none">
                             <option value="">{{ __('Selecciona una prioridad') }}</option>
                             @foreach ($prioridades as $prioridad)
                                 <option name="priority_option" value="{{ $prioridad->id }}" class="">{{ $prioridad->name }}</option>
@@ -82,6 +79,14 @@
                     </div>  
                 </div>
 
+                <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5 mt-3 mr-3">
+                    <div class="w-full mt-2 sm:mt-0 sm:w-1/2">
+                        <button type="button" name="register_time" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none">
+                            {{ __('Registrar tiempo') }}
+                        </button>
+                    </div>
+                </div>
+
             </div>
             <div class="flex flex-row justify-between p-5 bg-white border-t border-gray-200 rounded-bl-lg rounded-br-lg">
                 <button class="px-4 py-2 text-white font-semibold bg-blue-500 rounded" type="submit">
@@ -101,7 +106,7 @@
     <div class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl bg-white z-10 overflow-y-auto" style="max-height: 80vh; pointer-events: auto">
         <div class="flex flex-row justify-between p-6 bg-white border-b border-gray-200 rounded-tl-lg rounded-tr-lg">
             <p class="font-semibold text-gray-800" id="adduser"></p>
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onclick="closeModal(this)">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" onclick="closeModal('popup2')">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
         </div>
@@ -131,37 +136,39 @@
 <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-51" id="popup3">
     <div class="bg-white rounded-md w-96 p-6">
         <h1 class="text-xl font-bold mb-4">Seguimiento de tiempo</h1>
-        <input type="hidden" value="{{ csrf_token() }}" name="token_set_time">
-       
-        <div class="flex mb-4">
-            <div class="w-1/2 mr-2">
-                <label for="hours" class="font-bold">{{ __('Registrar tiempo') }}</label>
-                <div class="mt-2">
-                    <input id="hours" type="text" class="w-full border-gray-300 border rounded px-3 py-2" pattern="^(?:\d+h)?(?:\d+m)?$"
-                        title="Usa este formato: HH:MM" name="hours">
+        <form id="set_time_form" action="" method="POST">
+            <div class="flex mb-4">
+                <div class="w-1/2 mr-2">
+                    <label for="hours" class="font-bold">{{ __('Registrar tiempo') }}</label>
+                    <div class="mt-2">
+                        <input id="hours" type="text" class="w-full border-gray-300 border rounded px-3 py-2" pattern="^(?:(?:\d+h)?\d+m?)?$"
+                            title="Usa este formato: HH:MM" name="hours">
+                    </div>
+                </div>
+                <div class="w-1/2 ml-2">
+                    <label for="estatimated_hours" class="font-bold">{{ __('Tiempo asignado') }}</label>
+                    <div class="mt-2">
+                        <input id="estatimated_hours" type="text" value="" class="w-full border-gray-300 border rounded px-3 py-2" pattern="^(?:(?:\d+h)?\d+m?)?$"
+                            title="Usa este formato: HH:MM" name="estatimated_hours">
+                    </div>
                 </div>
             </div>
-            <div class="w-1/2 ml-2">
-                <label for="estatimated_hours" class="font-bold">{{ __('Tiempo asignado') }}</label>
-                <div class="mt-2">
-                    <input id="estatimated_hours" type="text" value="hola" class="w-full border-gray-300 border rounded px-3 py-2" pattern="^(?:\d+h)?(?:\d+m)?$"
-                        title="Usa este formato: HH:MM" name="estatimated_hours">
-                </div>
+            <div class="mb-4">
+                <small id="error_hours" class="ml-2 text-red-600"></small>
+                <p class="text-gray-500">Usa este formato: 2w 4d 6h 45m</p>
+                <ul class="list-disc list-inside text-gray-500">
+                    <li>w = semanas</li>
+                    <li>d = días</li>
+                    <li>h = horas</li>
+                    <li>m = minutos</li>
+                </ul>
             </div>
-        </div>
-        <div class="mb-4">
-            <p class="text-gray-500">Usa este formato: 2w 4d 6h 45m</p>
-            <ul class="list-disc list-inside text-gray-500">
-                <li>w = semanas</li>
-                <li>d = días</li>
-                <li>h = horas</li>
-                <li>m = minutos</li>
-            </ul>
-        </div>
-        <div class="flex justify-end">
-            <button type="button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded mr-2 text-sm" onclick="handleTime()">Guardar</button>
-            <button type="button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-3 rounded text-sm" onclick="closeModal(this)">Cancelar</button>
-        </div>
+            <div class="flex justify-end">
+                <button type="button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded mr-2 text-sm" onclick="handleTime()">Guardar</button>
+                <button type="button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-3 rounded text-sm" onclick="closeModal('popup3')">Cancelar</button>
+            </div>
+            @csrf
+        </form>
     </div>
 </div>
 

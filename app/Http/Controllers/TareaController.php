@@ -7,6 +7,7 @@ use App\Models\Estado;
 use App\Models\Prioridad;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class TareaController extends Controller
@@ -49,9 +50,19 @@ class TareaController extends Controller
 
         $tarea = Tarea::findOrFail($request->tarea_id);
 
+        $validator = Validator::make($request->all(), [
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        if ($validator->fails()) {
+            // Si la validación falla, redirecciona o devuelve una respuesta con los errores
+            return redirect()->back()->with('error', 'Hay un eror en la fecha.');
+        }
+
         $tarea->update($request->all());
 
-        return redirect()->back();   
+        return redirect()->back()->with('success', 'Tarea actualizada correctamente');   
         
     }
 
@@ -90,35 +101,27 @@ class TareaController extends Controller
             }
         }
 
-        $formattedTime = Tarea::parseDate($time);
+        $formattedTime = Tarea::parseTime($time);
         
         if($time2) {
-            $formatted_time2 = Tarea::parseDate($time2);
+            $formatted_time2 = Tarea::parseTime($time2);
             $formatted_time2 = $formatted_time2->toTimeString();
+            $tarea->estimated_hours = $formatted_time2;
         }
 
         if($tarea->hours) {
             $tareaTime = Carbon::parse($tarea->hours);
 
-            // Sumar el tiempo de la tarea a la instancia de tiempo inicial
             $formattedTime->addHours($tareaTime->hour);
             $formattedTime->addMinutes($tareaTime->minute);
             $formattedTime->addSeconds($tareaTime->second);
             $formattedTime = $formattedTime->toTimeString();
-
-            if(($tarea->estimated_hours && $formattedTime>$tarea->estimated_hours) && !$formatted_time2) {
-                    return redirect()->back()->with('error', 'Las horas no pueden ser mayores a las horas estimadas');
-            }
-
-            if($formatted_time2<$formattedTime) {
-                return redirect()->back()->with('error', 'Las horas no pueden ser mayores a las horas estimadas');
-            }
-
-            $tarea->estimated_hours = $formatted_time2;
         }
 
         $tarea->hours = $formattedTime;
         $tarea->save();
+
+        // mandar mensaje de cuidado si el numero de horas es mayor a las asignadas
 
         return redirect()->back();
 

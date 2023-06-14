@@ -53,28 +53,30 @@
       </div>
       <div class="shadow-xl mt-8 mr-0 mb-0 ml-0 pt-4 pr-10 pb-4 pl-10 flow-root rounded-lg sm:py-2">
         <div class="pt--10 pr-0 pb-10 pl-0">
-        @foreach($notifications as $notification)
-          <div class="pt-5 pr-0 pb-0 pl-0 mt-5 mr-0 mb-0 ml-0">
-            <div class="sm:flex sm:items-center sm:justify-between sm:space-x-5">
-            <div class="flex items-center flex-1 min-w-0">
-                <img
-                    src="https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/6/SlackLogo_CompanyNews_SecondaryAubergine_Hero.jpg?d=500x500&amp;f=fill" class="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"/>
-                <div class="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
-                <p class="text-lg font-bold text-gray-800 truncate">{{$notification->message}}</p>
-                @if(auth()->user()->id == $notification->sender->id)
-                    <p class="text-gray-600 text-md">{{ __('De: ') .$notification->receiver->name }}</p>
-                @endif
-
-                @if(auth()->user()->id == $notification->receiver->id)
-                    <p class="text-gray-600 text-md">{{ __('Para: ') .$notification->sender->name }}</p>
-                @endif
-
+          @foreach($notifications as $notification)
+          <div class="rounded-lg bg-white shadow-md p-6 mb-5">
+            <input type="hidden" name="notification_data" value="{{ $notification }}">
+            <div class="grid grid-cols-2 gap-4"> 
+              <div>
+                <div class="flex items-center mb-4">
+                  <img src="https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/6/SlackLogo_CompanyNews_SecondaryAubergine_Hero.jpg?d=500x500&amp;f=fill" class="w-12 h-12 rounded-full object-cover mr-4" />
+                  <div>
+                    <p class="text-lg font-bold text-gray-800">{{ $notification->message }}</p>
+                    @if(auth()->user()->id == $notification->sender->id)
+                      <p class="text-gray-600 text-sm">{{ __('De: ') .$notification->receiver->name }}</p>
+                    @endif
+                    @if(auth()->user()->id == $notification->receiver->id)
+                      <p class="text-gray-600 text-sm">{{ __('Para: ') .$notification->sender->name }}</p>
+                    @endif
+                  </div>
                 </div>
-            </div>
-            <div class="mt-4 mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
-                <a href="#" class="bg-gray-800 pt-2 pr-6 pb-2 pl-6 text-lg font-medium text-gray-100 transition-all
-                    duration-200 hover:bg-gray-700 rounded-lg">Ver Proyecto</a>
-            </div>
+              </div>
+              <div class="flex items-center justify-end">
+                <button type="button" class="bg-blue-500 text-white py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition-all duration-200 mr-3" onclick="acceptRequest(this)">Aceptar</button>
+                <button type="button" class="bg-red-500 text-white py-2 px-4 rounded-lg text-sm hover:bg-red-700 transition-all duration-200" onclick="declineRequest()">Rechazar</button>
+                <input type="hidden" id="accept_request" value="{{ route('usuarios_proyectos.store') }}">
+                <input type="hidden" id="accept_request_token" value="{{ csrf_token() }}">
+              </div>
             </div>
           </div>
           @endforeach
@@ -83,3 +85,5 @@
     </div>
   </div>
 </div>
+
+<script src="/js/notificacion.js"></script>

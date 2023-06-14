@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TareaController;
 use App\Http\Controllers\ProyectoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsuarioProyectoController;
 use App\Models\Notificacion;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('notifications', [NotificacionController::class, 'index'])->name('notifications.index');
     Route::post('/sendnotification', [NotificacionController::class, 'sendNotification'])->name('notification.sendNotification');
+
+    Route::resource('usuarios_proyectos', UsuarioProyectoController::class);
 });
 
 require __DIR__.'/auth.php';

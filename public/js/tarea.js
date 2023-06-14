@@ -9,6 +9,7 @@
     error_message = "";
     error_output = false;
     enabled = false;
+    form = null
 
     function openPopup(este) {
         // tarea = $(este).data('tarea');
@@ -38,6 +39,7 @@
                 url_update = url_update.replace(':proyecto_id', proyecto_id).replace(':tarea_id', id_tarea);
 
                 setAction(url_update);
+                form = $("#create_update_task");
                 // setMethod("POST")
                 fillInputs();
                 handleOptions(tarea.estado_id, tarea.prioridad_id);
@@ -55,9 +57,9 @@
             $("#assigned_time").text("Tiempo asignado: "+tarea.hours);
 
             if(tarea.estimated_hours == null) {
-                $("#assigned_time").text("Tiempo estimado: No se ha estimado");
+                $("#estimated_time").text("Tiempo estimado: No se ha estimado");
             } else {
-                $("#assigned_time").text("Tiempo estimado: "+tarea.estimated_hours);
+                $("#estimated_time").text("Tiempo estimado: "+tarea.estimated_hours);
             }
             
         });
@@ -74,6 +76,8 @@
             $("#hours").val('');
             $("#estimated_hours").val('');
             enabled = false;
+            $("#estimated_hours").addClass('bg-gray-200');
+            $("#estimated_hours").prop('disabled', true);
             return;
         }
 
@@ -145,6 +149,10 @@
         }
     }
 
+    function submitUpdate() {
+        form.submit();
+    }
+
     // function submitPopUp() {
     //     $form = $("#create_update_task");
 
@@ -155,18 +163,20 @@
     function openCreate(estado_id) {
         $('#popup').removeClass('hidden');
         $("#name_title").text('Crear nueva tarea');
+        $("#registrar_tiempo_button").addClass('hidden');
         url_create = $("#task_create").val();
 
         setAction(url_create);
+        form = $("#create_update_task");
         // setMethod("POST")
         handleOptions(estado_id);
 
-       $("[name=register_time]").click(() => {          
-            $("#popup3").removeClass('hidden');
-            $("#popup3").find("#registrar_tiempo").addClass('hidden');
-            $("#popup3").find("#estimated_hours").removeClass('bg-gray-200');
-            $("#popup3").find("#estimated_hours").prop('disabled', false);
-        });
+    //    $("[name=register_time]").click(() => {          
+    //         $("#popup3").removeClass('hidden');
+    //         $("#popup3").find("#registrar_tiempo").addClass('hidden');
+    //         $("#popup3").find("#estimated_hours").removeClass('bg-gray-200');
+    //         $("#popup3").find("#estimated_hours").prop('disabled', false);
+    //     });
     }
 
     function closeModal(id_modal) {
@@ -252,6 +262,8 @@
         $("#name").val(tarea.name);
         $("#name_title").text(tarea.name);
         $("#description").val(tarea.description);
+        $("[name=start_date]").val(tarea.start_date);
+        $("[name=end_date]").val(tarea.end_date);
     }
 
     function handleOptions(estado_id, prioridad_id = null) {
@@ -355,6 +367,9 @@
 
         $(document).on("click", "#userlist", function(event) {
             if ($(event.target).is("#request_user")) {
+                $("#request_user").text("Notificación enviada");
+                $("#request_user").addClass("bg-gray-500");
+                $("#request_user").prop('disabled', true);
                 let url_send_notification = $("[name=url_send_notification]").val();
                 let token = $("[name=token_send_notification]").val();
                 let user_receptor = $("[name=user_id]").val();

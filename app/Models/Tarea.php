@@ -51,7 +51,7 @@ class Tarea extends Model
         $this->estado_id = $estado_id;
     }
 
-    public static function parseDate($time) {
+    public static function parseTime($time) {
         $hours = 0;
 
         if(strpos($time, 'h')) {
@@ -72,4 +72,13 @@ class Tarea extends Model
 
         return $formattedTime;
     }
+
+    public static function paseDate($date) {
+        $carbon_date = Carbon::createFromFormat('d/m/Y', $date);
+        $carbon_parsed = $carbon_date->format('Y-m-d');
+
+        return $carbon_parsed;
+    }
+
+
 }

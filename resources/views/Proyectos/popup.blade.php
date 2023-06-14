@@ -14,88 +14,87 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
         </div>
-        <form id="create_update_task" name="create_update_task" action="" method="POST">
-            <input type="hidden" id="task_create" value="{{ route('proyectos.tareas.store', ['proyecto' => $proyecto_id]) }}">
-            <input type="hidden" id="proyecto_id" name="proyecto_id" value="{{ $proyecto_id }}">
-            <input type="hidden" id="tarea_id" name="tarea_id" value="">
             <div class="flex flex-col px-6 py-5 bg-gray-50 overflow-y-auto">
+                <form id="create_update_task" name="create_update_task" action="" method="POST">
+                    <input type="hidden" id="task_create" value="{{ route('proyectos.tareas.store', ['proyecto' => $proyecto_id]) }}">
+                    <input type="hidden" id="proyecto_id" name="proyecto_id" value="{{ $proyecto_id }}">
+                    <input type="hidden" id="tarea_id" name="tarea_id" value="">
 
-                <div class="w-full mt-2 sm:mt-0">
-                    <p class="mb-2 font-semibold text-gray-700">{{ __('Name') }}</p>
-                    <input type="text" name="name" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none field" id="name">
-                </div>
-                <!-- Contenido del popup -->
-            
-                <div class="w-full mt-2 sm:mt-0">
-                    <p class="mb-2 font-semibold text-gray-700 mt-3">{{ __('Description') }}</p>
-                    {{-- <input type="text" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none h-45"> --}}
-                    <textarea name="description" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none field" id="description"></textarea>
-                </div>
-
-                <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5 mt-3">
-                    <div class="w-full sm:w-1/2">
-                        <p class="mb-2 font-semibold text-gray-700">{{ __('Estado') }}</p>
-                        <select type="text" name="estado_id" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none field" id="estado">
-                            <option value="">{{ __('Selecciona un estado') }}</option>
-                            @foreach ($estados as $estado)
-                                <option name="state_option" value="{{ $estado->id }}" >{{ $estado->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="w-full mt-2 sm:mt-0">
+                        <p class="mb-2 font-semibold text-gray-700">{{ __('Name') }}</p>
+                        <input type="text" name="name" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none field" id="name">
+                    </div>
+                    <!-- Contenido del popup -->
+                
+                    <div class="w-full mt-2 sm:mt-0">
+                        <p class="mb-2 font-semibold text-gray-700 mt-3">{{ __('Description') }}</p>
+                        {{-- <input type="text" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none h-45"> --}}
+                        <textarea name="description" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none field" id="description"></textarea>
                     </div>
 
-                    <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
-                        <p class="mb-2 font-semibold text-gray-700">{{ __('Prioridad') }}</p>
-                        <select type="text" name="prioridad_id" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none">
-                            <option value="">{{ __('Selecciona una prioridad') }}</option>
-                            @foreach ($prioridades as $prioridad)
-                                <option name="priority_option" value="{{ $prioridad->id }}" class="">{{ $prioridad->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5 mt-3">
-                    <div class="w-full mt-2 sm:mt-0 sm:w-1/2">
-                    <p class="mb-2 font-semibold text-gray-700">{{ __('Fecha inicio') }}</p>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <input datepicker type="text" name="start_date" class="w-full p-3 bg-white border border-gray-200 rounded shadow-sm appearance-none pl-10 h-10" placeholder="Select date">
+                    <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5 mt-3">
+                        <div class="w-full sm:w-1/2">
+                            <p class="mb-2 font-semibold text-gray-700">{{ __('Estado') }}</p>
+                            <select type="text" name="estado_id" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none field" id="estado">
+                                <option value="">{{ __('Selecciona un estado') }}</option>
+                                @foreach ($estados as $estado)
+                                    <option name="state_option" value="{{ $estado->id }}" >{{ $estado->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                    </div>  
-                    <div class="w-full mt-2 sm:mt-0 sm:w-1/2">
-                        <p class="mb-2 font-semibold text-gray-700">{{ __('Fecha fin') }}</p>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <input datepicker type="text" name="end_date" class="w-full p-3 bg-white border border-gray-200 rounded shadow-sm appearance-none pl-10 h-10" placeholder="Select date">
+
+                        <div class="w-full sm:w-1/2 mt-2 sm:mt-0">
+                            <p class="mb-2 font-semibold text-gray-700">{{ __('Prioridad') }}</p>
+                            <select type="text" name="prioridad_id" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none">
+                                <option value="">{{ __('Selecciona una prioridad') }}</option>
+                                @foreach ($prioridades as $prioridad)
+                                    <option name="priority_option" value="{{ $prioridad->id }}" class="">{{ $prioridad->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                    </div>  
-                </div>
-
-                <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5 mt-3 mr-3">
-                    <div class="w-full mt-2 sm:mt-0 sm:w-1/2">
-                        <button type="button" name="register_time" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none">
-                            {{ __('Registrar tiempo') }}
-                        </button>
                     </div>
-                </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5 mt-3">
+                        <div class="w-full mt-2 sm:mt-0 sm:w-1/2">
+                        <p class="mb-2 font-semibold text-gray-700">{{ __('Fecha inicio') }}</p>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <input datepicker datepicker-buttons value="" datepicker-format="yyyy-mm-dd" type="text" name="start_date" class="w-full p-3 bg-white border border-gray-200 rounded shadow-sm appearance-none pl-10 h-10" placeholder="Select date">
+                            </div>
+                        </div>  
+                        <div class="w-full mt-2 sm:mt-0 sm:w-1/2">
+                            <p class="mb-2 font-semibold text-gray-700">{{ __('Fecha fin') }}</p>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <input datepicker datepicker-buttons value="" datepicker-format="yyyy-mm-dd" type="text" name="end_date" class="w-full p-3 bg-white border border-gray-200 rounded shadow-sm appearance-none pl-10 h-10" placeholder="Select date">
+                            </div>
+                        </div>  
+                    </div>
 
+                    <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5 mt-3 mr-3" id="registrar_tiempo_button">
+                        <div class="w-full mt-2 sm:mt-0 sm:w-1/2">
+                            <button type="button" name="register_time" class="w-full p-5 bg-white border border-gray-200 rounded shadow-sm appearance-none">
+                                {{ __('Registrar tiempo') }}
+                            </button>
+                        </div>
+                    </div>
+                    @method("POST")
+                    @csrf
+                </form>
             </div>
             <div class="flex flex-row justify-between p-5 bg-white border-t border-gray-200 rounded-bl-lg rounded-br-lg">
-                <button class="px-4 py-2 text-white font-semibold bg-blue-500 rounded" type="submit">
+                <button class="px-4 py-2 text-white font-semibold bg-blue-500 rounded" type="button" onclick="submitUpdate()">
                     Save
                 </button>
             </div>
-        @method("POST")
-        @csrf
-        </form>
     </div>
 </div>
 
@@ -157,7 +156,7 @@
                 <small id="error_hours" class="ml-2 text-red-600"></small>
                 <p class="text-gray-500" id="assigned_time"></p>
                 <p class="text-gray-500" id="estimated_time"></p>
-                <p class="text-gray-500">Usa este formato: 6h 45m</p>
+                <p class="text-gray-500 mt-2">Usa este formato: 6h 45m</p>
                 <ul class="list-disc list-inside text-gray-500">
                     <li>h = horas</li>
                     <li>m = minutos</li>

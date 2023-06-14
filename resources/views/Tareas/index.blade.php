@@ -1,5 +1,5 @@
 @include('layouts.app')
-@include('Tareas.error')
+@include('Tareas.alert')
 <div class="h-screen p-2">
   <div class="grid lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-2 gap-5" >
     <!-- To-do -->

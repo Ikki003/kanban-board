@@ -138,27 +138,27 @@
         <h1 class="text-xl font-bold mb-4">Seguimiento de tiempo</h1>
         <form id="set_time_form" action="" method="POST">
             <div class="flex mb-4">
-                <div class="w-1/2 mr-2">
+                <div class="w-1/2 mr-2" id="registrar_tiempo">
                     <label for="hours" class="font-bold">{{ __('Registrar tiempo') }}</label>
                     <div class="mt-2">
-                        <input id="hours" type="text" class="w-full border-gray-300 border rounded px-3 py-2" pattern="^(?:(?:\d+h)?\d+m?)?$"
+                        <input id="hours" type="text" class="w-full border-gray-300 border rounded px-3 py-2" pattern="^(?:(?:\d+h)?(?:\d+m)?)?$"
                             title="Usa este formato: HH:MM" name="hours">
                     </div>
                 </div>
-                <div class="w-1/2 ml-2">
-                    <label for="estatimated_hours" class="font-bold">{{ __('Tiempo asignado') }}</label>
-                    <div class="mt-2">
-                        <input id="estatimated_hours" type="text" value="" class="w-full border-gray-300 border rounded px-3 py-2" pattern="^(?:(?:\d+h)?\d+m?)?$"
-                            title="Usa este formato: HH:MM" name="estatimated_hours">
+                <div class="w-1/2 mr-2">
+                    <label for="hours" class="font-bold">{{ __('Tiempo estimado') }}</label>
+                    <div class="mt-2" onclick="enableInput()">
+                        <input id="estimated_hours" type="text" class="w-full bg-gray-200 border-gray-300 border rounded px-3 py-2" pattern="^(?:(?:\d+h)?(?:\d+m)?)?$"
+                            title="Usa este formato: HH:MM" name="estimated_hours" disabled>
                     </div>
                 </div>
             </div>
             <div class="mb-4">
                 <small id="error_hours" class="ml-2 text-red-600"></small>
-                <p class="text-gray-500">Usa este formato: 2w 4d 6h 45m</p>
+                <p class="text-gray-500" id="assigned_time"></p>
+                <p class="text-gray-500" id="estimated_time"></p>
+                <p class="text-gray-500">Usa este formato: 6h 45m</p>
                 <ul class="list-disc list-inside text-gray-500">
-                    <li>w = semanas</li>
-                    <li>d = días</li>
                     <li>h = horas</li>
                     <li>m = minutos</li>
                 </ul>

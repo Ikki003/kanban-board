@@ -1,5 +1,5 @@
 @include('layouts.app')
-
+@include('Tareas.error')
 <div class="h-screen p-2">
   <div class="grid lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-2 gap-5" >
     <!-- To-do -->
@@ -17,7 +17,7 @@
       <!-- board card -->
       @foreach($tareas as $tarea)
         @if($tarea->estado_id === $estado->id)
-          <div class="grid grid-rows-1 gap-2 sortable-task mt-2 mb-2" name="task" data-id="{{$tarea->id}}" data-id2="{{$proyecto->id}}" data-id3="{{$estado->id}}" onclick="openPopup()" draggable="true" ondragstart="drag(event)">
+          <div class="grid grid-rows-1 gap-2 sortable-task mt-2 mb-2" name="task" data-id="{{$tarea->id}}" data-id2="{{$proyecto->id}}" data-id3="{{$estado->id}}" onclick="openPopup(this)" draggable="true" ondragstart="drag(event)">
             <input type="hidden" name="url_edit" value="{{ route('proyectos.tareas.edit', ['proyecto' => $proyecto->id, 'tarea' => $tarea->id]) }}">
             <input type="hidden" name="url_update" value="{{ route('proyectos.tareas.update', ['proyecto' => $proyecto->id, 'tarea' => $tarea->id]) }}" token="{{ csrf_token() }}">
             <div class="p-2 rounded shadow-sm border-gray-100 border-2">

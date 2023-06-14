@@ -21,7 +21,7 @@ class TareaController extends Controller
         return view('Tareas.index', compact('tareas', 'estados', 'proyecto', 'prioridades'));
     }
 
-    public function edit($id) {
+    public function edit($proyecto_id, $id) {
 
         $tarea = Tarea::findOrFail($id);
         $estados = Estado::all();
@@ -77,24 +77,50 @@ class TareaController extends Controller
     }
 
 
-    public function setTime(Request $request) {
+    public function setTime(Request $request, $id, $id_tarea) {
+    
+        $tarea = Tarea::findOrFail($id_tarea);
 
         $time = $request->hours;
+        $time2 = $request->estimated_hours;
 
-        $interval = CarbonInterval::fromString($time);
-        $seconds = $interval->total('seconds');
-        
-        $hours = floor($seconds / 3600);
-        $minutes = floor(($seconds % 3600) / 60);
-        $seconds = $seconds % 60;
-        
-        $carbon = Carbon::createFromTime($hours, $minutes, $seconds);
-        // Extraer los componentes del tiempo
+        if($time && !$time2) {
+            if(!$tarea->estimated_hours) {
+                return redirect()->back()->with('error', 'Necesitas asignar unas horas estimadas');
+            }
+        }
 
-        var_dump($carbon->toTimeString());
-
+        $formattedTime = Tarea::parseDate($time);
         
+        if($time2) {
+            $formatted_time2 = Tarea::parseDate($time2);
+            $formatted_time2 = $formatted_time2->toTimeString();
+        }
+
+        if($tarea->hours) {
+            $tareaTime = Carbon::parse($tarea->hours);
+
+            // Sumar el tiempo de la tarea a la instancia de tiempo inicial
+            $formattedTime->addHours($tareaTime->hour);
+            $formattedTime->addMinutes($tareaTime->minute);
+            $formattedTime->addSeconds($tareaTime->second);
+            $formattedTime = $formattedTime->toTimeString();
+
+            if(($tarea->estimated_hours && $formattedTime>$tarea->estimated_hours) && !$formatted_time2) {
+                    return redirect()->back()->with('error', 'Las horas no pueden ser mayores a las horas estimadas');
+            }
+
+            if($formatted_time2<$formattedTime) {
+                return redirect()->back()->with('error', 'Las horas no pueden ser mayores a las horas estimadas');
+            }
+
+            $tarea->estimated_hours = $formatted_time2;
+        }
+
+        $tarea->hours = $formattedTime;
+        $tarea->save();
+
+        return redirect()->back();
 
     }
-
 }

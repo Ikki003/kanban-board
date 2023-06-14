@@ -6,20 +6,19 @@
     proyecto_id_join = null;
     id_tarea = null;
     proyecto_id = null;
+    error_message = "";
+    error_output = false;
+    enabled = false;
 
-    function openPopup() {
+    function openPopup(este) {
         // tarea = $(este).data('tarea');
         // let id_proyecto = $(este).data('id2');
 
-        var url = $("[name='url_edit']").val();
-
-        $("[name=register_time]").click(() => {
-            $("#popup3").removeClass('hidden');
-        });
+        var url_edit_task = $(este).find('[name="url_edit"]').val();
 
         $.ajax({
             type: "GET",
-            url: url,
+            url: url_edit_task,
             success: function(data){
 
             if(data['tarea']) {
@@ -47,31 +46,46 @@
             },
             error: function(){
 
-            }
+            },
+
         });
+
+        $("[name=register_time]").click(() => {
+            $("#popup3").removeClass('hidden');
+            $("#assigned_time").text("Tiempo asignado: "+tarea.hours);
+
+            if(tarea.estimated_hours == null) {
+                $("#assigned_time").text("Tiempo estimado: No se ha estimado");
+            } else {
+                $("#assigned_time").text("Tiempo estimado: "+tarea.estimated_hours);
+            }
+            
+        });
+
     }
 
     function handleTime() {
 
         let hours = $("#hours").val();
-        let pattern = /^(?:\d+w)?(?:\d+d)?(?:\d+h)?(?:\d+m)?$/;
+        let estimated_hours = $("#estimated_hours").val();
 
-        var regex = /(\d+)h(\d+)m/;
-        var match = regex.exec(hours);
-
-        if (match) {
-            hours = parseInt(match[1]);
-            minutes = parseInt(match[2]);
-
-            while (minutes/60 >= 1) {
-                minutes -= 60;
-                hours++;
-              }
+        if(enabled && estimated_hours.length === 0) {
+            $("#error_hours").text("No has introducido horas estimadas");
+            $("#hours").val('');
+            $("#estimated_hours").val('');
+            enabled = false;
+            return;
         }
 
-        if(!hours.match(pattern) || hours>99) {
-            $("#error_hours").text("Ha surgido un error");
+        validatorDateInput(hours, true);
+        validatorDateInput(estimated_hours, false);
+
+        if(error_output) {
+            $("#error_hours").text(error_message);
             $("#hours").val('');
+            $("#estimated_hours").val('');
+            error_output = false;
+            error_message = "";
             return;
         }
 
@@ -82,6 +96,53 @@
         $form = $("#set_time_form");
         $form.submit();
 
+    }
+
+    function validatorDateInput(date, is_hours) {
+        let date_string = date;
+
+        if(!date && is_hours) {
+            error_message = "Añade un tiempo para guardar.";
+            error_output = true;
+            return;
+        }
+
+        let pattern = /^(?:(?:\d+h)?(?:\d+m)?)?$/;
+
+
+        // $("#hours").val(tarea['hours']);
+
+        var regex = /(\d+)h(\d+)m/;
+        var match = regex.exec(date);
+
+        let hoursString = '';
+        let minutesString = '';
+
+        if (match) {
+            hoursString = match[1];
+            minutesString = match[2];
+
+            hours = parseInt(hoursString);
+            minutes = parseInt(minutesString);
+
+            if(minutes>60) {
+                error_message = "Los minutos no pueden superar los 60; añade más horas.";
+                error_output = true;
+                return;
+            }
+        }
+
+        if(hours>99) {
+            error_message = "Las horas no pueden superar las 99.";
+            error_output = true;
+            return;
+        }
+
+        if(!(date_string.match(pattern))) {
+            error_message = "Asegúrate de meter la hora con formato 2h2m.";
+            error_output = true;
+            return;
+        }
     }
 
     // function submitPopUp() {
@@ -100,8 +161,11 @@
         // setMethod("POST")
         handleOptions(estado_id);
 
-        $("#show_hours").click(() => {
+       $("[name=register_time]").click(() => {          
             $("#popup3").removeClass('hidden');
+            $("#popup3").find("#registrar_tiempo").addClass('hidden');
+            $("#popup3").find("#estimated_hours").removeClass('bg-gray-200');
+            $("#popup3").find("#estimated_hours").prop('disabled', false);
         });
     }
 
@@ -211,6 +275,12 @@
                 return; // Sale del bucle forEach
             }
         });
+    }
+
+    function enableInput() {
+        $("#estimated_hours").removeClass('bg-gray-200');
+        $("#estimated_hours").prop('disabled', false);
+        enabled = true;
     }
 
     $(document).ready(() => {

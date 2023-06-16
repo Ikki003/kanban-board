@@ -184,11 +184,12 @@
         let modal = $("" + '#' + id_modal + "");
         modal.addClass('hidden');
 
-        if(id_modal = 'popup3') {
+        if(id_modal == 'popup3') {
             $("#hours").val('');
-        } else {
-            location.reload();
+            return;
         }
+
+        location.reload();
     }
 
     function drag(ev) {
@@ -298,6 +299,7 @@
     $(document).ready(() => {
         $("#newmember").click(() => {
             $("#popup2").removeClass('hidden');
+            $("#user_name").focus();
             auth_user = $("#auth_user").val();
             proyecto_id_join = $("#proyecto_id_join").val();
         })
@@ -351,9 +353,8 @@
                         "      <p class='text-gray-400'> :correo </p>\n" +
                         "    </div>\n" +
                         "  </div>\n" +
-                        "   <button type='text' class='bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ml-4 ease-linear transition-all duration-150' id='request_user'> Mandar Solicitud</button>\n" +
-                        "  </div>\n" +
-                        "  <input type='hidden' value=':user_id' name='user_id'>\n";
+                        "   <button type='text' class='bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ml-4 ease-linear transition-all duration-150' data-id=':user_id' name='request_user'> Mandar Solicitud</button>\n" +
+                        "  </div>\n";
 
                         html = html.replace(':nombre', user.name)
                             .replace(':correo', user.email)
@@ -366,13 +367,14 @@
         })
 
         $(document).on("click", "#userlist", function(event) {
-            if ($(event.target).is("#request_user")) {
-                $("#request_user").text("Notificación enviada");
-                $("#request_user").addClass("bg-gray-500");
-                $("#request_user").prop('disabled', true);
+            if ($(event.target).is("[name=request_user]")) {
+                let component = $(event.target);
+                $(component).text("Notificación enviada");
+                $(component).addClass("bg-gray-500");
+                $(component).prop('disabled', true);
                 let url_send_notification = $("[name=url_send_notification]").val();
                 let token = $("[name=token_send_notification]").val();
-                let user_receptor = $("[name=user_id]").val();
+                let user_receptor = $(component).data('id');
 
                 $.ajax({
                     type: "POST",
@@ -386,8 +388,10 @@
                     },
                     success: function(data){
                     
-                        if(data['ok'] == true) {
-                            location.reload();
+                        if(data['error']){
+                            $("#error").text(data['error']);
+                            $(component).text("Mandar Solicitud");
+                            return;
                         }
         
                     },

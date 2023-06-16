@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     // Route::resource('tareas', TareaController::class);
     Route::resource('proyectos', ProyectoController::class);
     Route::post('proyecto/{proyecto}/addmember', [ProyectoController::class, 'addMember'])->name('proyecto.addMember');
+    Route::get('proyecto/{proyecto}/gettareascount', [ProyectoController::class, 'getTareasCount']);
 
     Route::resource('proyectos.tareas', TareaController::class);
     Route::post('proyectos/{proyecto}/tareas/{tarea}/', [TareaController::class, 'update'])->name('proyectos.tareas.update');

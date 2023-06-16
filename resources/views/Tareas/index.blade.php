@@ -1,5 +1,5 @@
 @include('layouts.app')
-@include('Tareas.alert')
+@include('components.alert')
 <div class="h-screen p-2">
   <div class="grid lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-2 gap-5" >
     <!-- To-do -->
@@ -34,14 +34,14 @@
       @endforeach
       <div class="flex flex-row items-center text-gray-300 mt-2 px-1" onclick="openCreate({{$estado->id}})">
         <p class="rounded mr-2 text-2xl">+</p>
-        <p class="pt-1 rounded text-sm">New</p>
+        <p class="pt-1 rounded text-sm">{{ __('Nueva tarea') }}</p>
       </div>
     </div>
     @endforeach
   </div>
 </div>
 
-@include('Proyectos.popup')
+@include('Tareas.popup')
 
 <script src="/js/tarea.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

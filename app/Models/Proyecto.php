@@ -34,4 +34,12 @@ class Proyecto extends Model
         $proyecto = Proyecto::findOrFail($this->id);
         return $proyecto->usuarios()->pluck('name');
     }
+
+    public function admin() {
+        return $this->belongsTo(User::class, 'responsable_id');
+    }
+
+    public function getTareasCount() {
+        return $this->tareas->count();
+    }
 }

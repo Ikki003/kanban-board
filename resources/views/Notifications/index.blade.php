@@ -1,5 +1,5 @@
-
 @include('layouts.app')
+@include('Notifications.alert')
 
 {{-- <div class="mx-auto container py-20 px-6">
     <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -63,20 +63,38 @@
                   <div>
                     <p class="text-lg font-bold text-gray-800">{{ $notification->message }}</p>
                     @if(auth()->user()->id == $notification->sender->id)
-                      <p class="text-gray-600 text-sm">{{ __('De: ') .$notification->receiver->name }}</p>
+                      <p class="text-gray-600 text-sm">{{ __('Para: ') .$notification->receiver->name }}</p>
                     @endif
                     @if(auth()->user()->id == $notification->receiver->id)
-                      <p class="text-gray-600 text-sm">{{ __('Para: ') .$notification->sender->name }}</p>
+                      <p class="text-gray-600 text-sm">{{ __('De: ') .$notification->sender->name }}</p>
                     @endif
                   </div>
                 </div>
               </div>
+              @if($notification->estado_notificacion_id == 1 && $notification->user_receptor_id == auth()->user()->id)
+                <div class="flex items-center justify-end">
+                  <button type="button" id="accept" class="bg-blue-500 text-white py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition-all duration-200 mr-3" onclick="manageRequest({{$notification}}, 'accept')">Aceptar</button>
+                  <button type="button" id="decline" class="bg-red-500 text-white py-2 px-4 rounded-lg text-sm hover:bg-red-700 transition-all duration-200" onclick="manageRequest({{$notification}}, 'decline')">Rechazar</button>
+                  <input type="hidden" id="manage_request" value="{{ route('usuarios_proyectos.store') }}">
+                  <input type="hidden" id="manage_request_token" value="{{ csrf_token() }}">
+                </div>
+              @elseif($notification->estado_notificacion_id == 1 && !($notification->user_receptor_id == auth()->user()->id))
+                <div class="flex items-center justify-end">
+                  <button type="button" class="bg-purple-400 text-white py-2 px-4 rounded-lg text-sm hover:bg-purple-700 transition-all duration-200 mr-3" disabled>{{ __('Pendiente') }}</button>
+                </div>
+              @elseif($notification->estado_notificacion_id == 2)
+                <div class="flex items-center justify-end">
+                  <button type="button" class="bg-green-400 text-white py-2 px-4 rounded-lg text-sm hover:bg-green-700 transition-all duration-200 mr-3" disabled>{{ __('Aceptada') }}</button>
+                </div>
+              @elseif($notification->estado_notificacion_id == 3)
               <div class="flex items-center justify-end">
-                <button type="button" class="bg-blue-500 text-white py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition-all duration-200 mr-3" onclick="acceptRequest(this)">Aceptar</button>
-                <button type="button" class="bg-red-500 text-white py-2 px-4 rounded-lg text-sm hover:bg-red-700 transition-all duration-200" onclick="declineRequest()">Rechazar</button>
-                <input type="hidden" id="accept_request" value="{{ route('usuarios_proyectos.store') }}">
-                <input type="hidden" id="accept_request_token" value="{{ csrf_token() }}">
+                <button type="button" class="bg-yellow-400 text-white py-2 px-4 rounded-lg text-sm hover:bg-yellow-700 transition-all duration-200 mr-3" disabled>{{ __('Cancelada') }}</button>
               </div>
+              @else
+              <div class="flex items-center justify-end">
+                <button type="button" class="bg-gray-400 text-white py-2 px-4 rounded-lg text-sm hover:bg-gray-700 transition-all duration-200 mr-3" disabled>&nbsp; {{ __('Privada') }} &nbsp;</button>
+              </div>
+              @endif
             </div>
           </div>
           @endforeach

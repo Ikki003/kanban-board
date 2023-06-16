@@ -34,5 +34,11 @@ class EstadosNotificacionesSeeder extends Seeder
             'slug' => 'cancelada',
             'created_at' => Carbon::now(),
         ]);
+
+        DB::table('estados_notificaciones')->insert([
+            'name' => 'Privada',
+            'slug' => 'privada',
+            'created_at' => Carbon::now(),
+        ]);
     }
 }

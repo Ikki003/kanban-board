@@ -1,3 +1,6 @@
+@php
+    use App\Models\Proyecto;
+@endphp
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,14 +29,41 @@
                     @php
                         $proyecto_id = Request::segment(2);
                         $auth_user = auth()->user()->id;
-                    @endphp
 
+                        $proyecto = Proyecto::find($proyecto_id);
+                    @endphp
                     <button id="newmember" class="bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button">
-                        <i class="fas fa-user mr-1"></i></i> {{ __('Add new member') }}
+                        <i class="fas fa-plus"></i> {{ __('Añadir nuevo usuario') }}
                         <input type="hidden" value="{{ $auth_user }}" id="auth_user">
                         <input type="hidden" value="{{ $proyecto_id }}" id="proyecto_id_join">
                     </button>
-                   
+
+                    
+                    <button id="multiLevelDropdownButton" data-dropdown-toggle="dropdown" class="bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button">
+                        <span class="flex items-center"> 
+                            <i class="fas fa-user mr-1"></i> {{ __('Usuarios') }}
+                            <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </span>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="multiLevelDropdownButton">
+                            @foreach($proyecto->usuarios as $usuario)
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $usuario->name }}</a>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <button id="deleteProject" class="bg-red-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button" onclick="deleteProject()">
+                        <span class="flex items-center"> 
+                            <i class="fas fa-trash"></i> 
+                            <p class="ml-1">{{ __('Eliminar Proyecto') }} </p>
+                        </span>
+                    </button>
                 @endif
 
 

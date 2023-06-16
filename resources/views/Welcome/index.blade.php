@@ -21,16 +21,16 @@
         </div>
     @endif
 
-    <div class="flex min-h-screen items-center justify-center bg-black font-bold text-white">
+    <div class="flex min-h-screen items-center justify-center bg-white font-bold text-black">
     <div class=" text-center space-y-12">
         <div class="text-center text-5xl font-bold">
-            Services offered
+            Optimiza tu tiempo 
             <div class="relative inline-grid grid-cols-1 grid-rows-1 gap-12 overflow-hidden">
-            <span class="animate-word col-span-full row-span-full">Flutter</span>
-            <span class="animate-word-delay-1 col-span-full row-span-full">Django</span>
-            <span class="animate-word-delay-2 col-span-full row-span-full">Website</span>
-            <span class="animate-word-delay-3 col-span-full row-span-full">VueJS</span>
-            <span class="animate-word-delay-4 col-span-full row-span-full">NuxtJS</span>
+            <span class="animate-word col-span-full row-span-full">Simplifica</span>
+            <span class="animate-word-delay-1 col-span-full row-span-full">Organiza</span>
+            <span class="animate-word-delay-2 col-span-full row-span-full">Potencia</span>
+            <span class="animate-word-delay-3 col-span-full row-span-full">Agiliza</span>
+            <span class="animate-word-delay-4 col-span-full row-span-full">Gestiona</span>
             </div>
         </div>
         <p class=" text-white">

@@ -10,6 +10,11 @@ class Estado extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const ESTADO_POR_HACER = 1;
+    const ESTADO_EN_CURSO = 2;
+    const ESTADO_EN_REVIEW = 3;
+    const ESTADO_FINALIZADA = 4;
+
     protected $guarded = [
         'id',
         'created_at',

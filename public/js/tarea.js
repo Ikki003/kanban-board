@@ -17,6 +17,9 @@
 
         var url_edit_task = $(este).find('[name="url_edit"]').val();
 
+        let project_admin = $(este).find('[name="user_admin"]').val();
+        let logged_user = $(este).find('[name="user_admin"]').data('logged');
+
         $.ajax({
             type: "GET",
             url: url_edit_task,
@@ -26,6 +29,16 @@
                 // $('#contenedor').html(data);
                 $('#popup').removeClass('hidden');
                 // $('#popup').removeClass('hidden');
+
+                if(project_admin == logged_user) {
+                    $("#delete_task_button").removeClass('hidden');
+                }
+
+                $("[name=options_users]").click((event) => {
+                    let value_option = $(event.target).data('value');
+                    $("#responsable_id").val(value_option);
+                    $("#dropdown2").addClass('hidden');
+                })
 
                 tarea = data['tarea'];
 
@@ -42,7 +55,7 @@
                 form = $("#create_update_task");
                 // setMethod("POST")
                 fillInputs();
-                handleOptions(tarea.estado_id, tarea.prioridad_id);
+                handleOptions(tarea.estado_id, tarea.prioridad_id, tarea.responsable_id);
 
             }
             },
@@ -65,6 +78,10 @@
         });
 
     }
+
+    $("#delete_task_button").click(() => {
+        $("#delete_task_form").attr('action', "tareas/"+id_tarea);
+    })
 
     function handleTime() {
 
@@ -267,9 +284,11 @@
         $("[name=end_date]").val(tarea.end_date);
     }
 
-    function handleOptions(estado_id, prioridad_id = null) {
+    function handleOptions(estado_id, prioridad_id = null, responsable_id) {
+
         let options_state = $("[name=state_option]");
         let options_priority = $("[name=priority_option]");
+        let options_users = $("[name=options_users]");
 
         options_state.each((index, element) => {
             let currentValue = $(element).val();
@@ -285,6 +304,17 @@
             
             if (currentValue == prioridad_id) {
                 $(element).attr('selected', true);
+                return; // Sale del bucle forEach
+            }
+        });
+
+        options_users.each((index, element) => {
+ 
+            let currentValue = $(element).data('value');
+            
+            if (currentValue == responsable_id) {
+                $("#badge_user_"+currentValue).removeClass('hidden');
+                $("#responsable_id").val(currentValue);
                 return; // Sale del bucle forEach
             }
         });

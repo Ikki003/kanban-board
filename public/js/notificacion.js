@@ -27,3 +27,10 @@ function manageRequest(notification, mode) {
         },
     });
 }
+
+$("[name=filter_state]").click((event) => {
+    let value = $(event.target).data('id');
+    $("[name=filter_state_input]").val(value);
+    $form = $("#search_notification");
+    $form.submit();
+}) 

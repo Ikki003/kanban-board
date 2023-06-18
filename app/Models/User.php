@@ -52,7 +52,7 @@ class User extends Authenticatable
     }
 
     public function notificationsSent() {
-        return $this->hasMany(Notification::class, 'user_sender_id');
+        return $this->hasMany(Notificacion::class, 'user_sender_id');
     }
 
     public function proyectosAdmin() {
@@ -60,6 +60,16 @@ class User extends Authenticatable
     }
 
     public function notificationsReceived() {
-        return $this->hasMany(Notification::class, 'user_receiver_id');
+        return $this->hasMany(Notificacion::class, 'user_receiver_id');
     }
+
+    public function getUnread() {
+        return $this->with('notificationsSent', 'notificationsReceived')
+            ->join('notificaciones', function ($join) {
+                $join->on('notificaciones.user_sender_id', '=', 'users.id')
+                    ->where('notificaciones.read', 0);
+            })
+            ->count();
+    }
+
 }

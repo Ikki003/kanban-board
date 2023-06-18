@@ -32,8 +32,9 @@ Route::middleware('auth')->group(function () {
     
     // Route::resource('tareas', TareaController::class);
     Route::resource('proyectos', ProyectoController::class);
-    Route::post('proyecto/{proyecto}/addmember', [ProyectoController::class, 'addMember'])->name('proyecto.addMember');
-    Route::get('proyecto/{proyecto}/gettareascount', [ProyectoController::class, 'getTareasCount']);
+    // Route::post('proyectos/{proyecto}/addmember', [ProyectoController::class, 'addMember'])->name('proyecto.addMember');
+    // Route::get('proyectos/{proyecto}/gettareascount', [ProyectoController::class, 'getTareasCount']);
+    Route::post('proyectos/serachproject', [ProyectoController::class, 'search'])->name('proyectos.searchProject');
 
     Route::resource('proyectos.tareas', TareaController::class);
     Route::post('proyectos/{proyecto}/tareas/{tarea}/', [TareaController::class, 'update'])->name('proyectos.tareas.update');
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/getusers', [UserController::class, 'getUsers'])->name('user.getUsers');
 
     Route::get('notifications', [NotificacionController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/serachnotification', [NotificacionController::class, 'search'])->name('notifications.searchNotification');
+    // Route::post('notifications/read', [NotificacionController::class, 'read'])->name('notifications.read');
     Route::post('/sendnotification', [NotificacionController::class, 'sendNotification'])->name('notification.sendNotification');
 
     Route::resource('usuarios_proyectos', UsuarioProyectoController::class);

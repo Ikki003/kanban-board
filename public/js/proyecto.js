@@ -10,11 +10,28 @@
     $form.submit();
  }
 
- function deleteProject() {
-    ("#popup5").removeClass('hidden');
+ function closeModal() {
 
-    $.ajax({
-        type: "GET",
-        url: url_edit_task,
-    })
- }
+   $("#popup4").addClass('hidden');
+
+   location.reload();
+}
+
+$("#search_project_input").keydown(function(event) {
+   if (event.keyCode === 13) {
+     event.preventDefault(); 
+
+     $form = $("#search_project");
+     $form.submit();
+   }
+});
+
+$('input[type="search"]').on('search', () => {
+   $form = $("#search_project");
+   $form.submit();
+ });
+
+$("#delete_input").click(() => {
+   $form = $("#search_project");
+   $form.submit();
+})

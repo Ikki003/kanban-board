@@ -38,6 +38,5 @@ class UsuarioProyectoController extends Controller
         $notificacion->save();
        
         return response()->json(['ok'=>true, 'message'=>'Has rechazado la solicitud', 'mode'=>'decline']);
-        // me quedo aqui. tengo que mandar notificacion a usuario de que ha aceptado la peticion
     }
 }

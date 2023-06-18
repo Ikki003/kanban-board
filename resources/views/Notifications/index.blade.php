@@ -1,58 +1,58 @@
 @include('layouts.app')
 @include('Notifications.alert')
 
-{{-- <div class="mx-auto container py-20 px-6">
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        @foreach($notifications as $notification) 
-        <div class="rounded"> 
-            <div class="w-full h-64 flex flex-col justify-between dark:bg-gray-800 bg-white dark:border-gray-700 rounded-lg border border-gray-400 mb-6 py-5 px-4">
-                <div>
-                    <h4 class="text-gray-800 dark:text-gray-100 font-bold mb-3"></h4>
-                    <p class="text-gray-800 dark:text-gray-100 text-sm">Our interior design experts work with you to create the space that you have been dreaming about.</p>
-                </div>
-                <div>
-                <div class="flex items-center justify-between text-gray-800 dark:text-gray-100">
-                    <p class="text-sm">March 28, 2020</p>
-                    <button class="w-8 h-8 rounded-full bg-gray-800 dark:bg-gray-100 dark:text-gray-800 text-white flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-black" aria-label="edit note" role="button">
-                        <svg  xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"></path>
-                            <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
-                            <line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-        @endforeach    
-    </div>
-</div> --}}
-
 <div class="bg-white pt-12 pr-0 pb-12 pl-0 mt-0 mr-auto mb-0 ml-auto sm:py-16 lg:py-20">
   <div class="pt-0 pr-4 pb-0 pl-4 mt-0 mr-auto mb-0 ml-auto max-w-7xl sm:px-6 lg:px-8">
     <div class="pt-0 pr-4 pb-0 pl-4 mt-0 mr-auto mb-0 ml-auto max-w-4xl sm:px-6 lg:px-8">
       <div class="pt-0 pr-4 pb-0 pl-4 mt-0 mr-auto mb-0 ml-auto sm:flex sm:items-center sm:justify-between">
         <div>
-          <p class="text-xl font-bold text-gray-900">Busca entre todos los proyectos</p>
-          <p class="text-sm mt-1 mr-0 mb-0 ml-0 font-semi-bold text-gray-500">Lorem ipsum dolor sit amet, consectetur
-              adipis</p>
+          <p class="text-xl font-bold text-gray-900">Busca entre todas las notificaciones</p>
+          <p class="text-sm mt-1 mr-0 mb-0 ml-0 font-semi-bold text-gray-500"></p>
         </div>
-        <div class="mt-4 mr-0 mb-0 ml-0 sm:mt-0">
-          <p class="sr-only">Search Position</p>
-          <div class="relative">
-            <div class="flex items-center pt-0 pr-0 pb-0 pl-3 absolute inset-y-0 left-0 pointer-events-none">
-              <p>
-                <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24"
-                    stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21
-                    21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              </p>
+        <div class="mt-4 mr-0 mb-0 ml-0 sm:mt-0 flex">
+          <form id="search_notification" action="{{ route('notifications.searchNotification') }}" method="POST">
+            <button id="dropdownStates" data-dropdown-toggle="dropdown" class="bg-white-500 text-gray font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button">
+              <span class="flex items-center"> 
+                  {{ __('Estados') }}
+                  <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+              </span>
+            </button>
+                      <!-- Dropdown menu -->
+            <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="multiLevelDropdownButton">
+                    @foreach ($estados_notificaciones as $name=>$id)
+                      <li>
+                        <input type="hidden" name="filter_state_input" value="">
+                        <p name="filter_state" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-id="{{ $id }}">{{ $name }}</p>
+                      </li>
+                    @endforeach                  
+                </ul>
             </div>
-            <input placeholder="Search Positions " type="search" class="border block pt-2 pr-0 pb-2 pl-10 w-full py-2
-                pl-10 border border-gray-300 rounded-lg focus:ring-indigo-600 focus:border-indigo-600 sm:text-sm"/>
-          </div>
+            @csrf
+            @method("POST")
+          </form>
+          {{-- }<form id="read" action="{{ route('notifications.read') }}" method="POST">
+            <button id="readNotification" class="ml-2 bg-white-500 text-gray font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="submit">
+              <span class="flex items-center"> 
+                  {{ __('Leer notificaciones') }}
+              </span>
+            </button>
+            @csrf
+            @method("POST")
+          </form> --}}
         </div>
       </div>
       <div class="shadow-xl mt-8 mr-0 mb-0 ml-0 pt-4 pr-10 pb-4 pl-10 flow-root rounded-lg sm:py-2">
         <div class="pt--10 pr-0 pb-10 pl-0">
+        @if(count($notifications) === 0)
+        <div class="flex items-center flex-1 min-w-0">
+          <div class="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0 text-center">
+              <p class="text-lg font-bold text-gray-800 truncate items-center mt-2">{{ __('No se ha encontrado ninguna notificación') }}</p>
+          </div>
+        </div>
+        @else
           @foreach($notifications as $notification)
           <div class="rounded-lg bg-white shadow-md p-6 mb-5">
             <input type="hidden" name="notification_data" value="{{ $notification }}">
@@ -98,6 +98,7 @@
             </div>
           </div>
           @endforeach
+        @endif
         </div>
       </div>
     </div>

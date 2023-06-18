@@ -16,6 +16,7 @@ class EstadoNotificacion extends Model
     const ESTADO_ACEPTADA = 2;
     const ESTADO_CANCELADA = 3;
     const ESTADO_PRIVADA = 4;
+    const ESTADO_ALL = "all";
 
     protected $guarded = [
         'id',

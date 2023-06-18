@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Tarea;
 use App\Models\Proyecto;
 use App\Models\Estado;
+use App\Models\EstadoNotificacion;
+use App\Models\Notificacion;
 use App\Models\Prioridad;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -39,25 +41,43 @@ class TareaController extends Controller
     }
 
     public function update(Request $request) {
+        $auth_user = auth()->user()->name;
+
+        if($request->task_id) {
+            $tarea_id = $request->task_id;
+        } else {
+            $tarea_id = $request->tarea_id;
+        }
+
+        $tarea = Tarea::findOrFail($tarea_id);
+        $tarea_responsable_before = $tarea->responsable_id;
 
         if($request->modo == 'ondrop') {
-            $tarea = Tarea::findOrFail($request->task_id);
             $tarea->estado_id = $request->state_id;
             $tarea->save();
             
             return response()->json(['ok'=>true]);
         }
 
-        $tarea = Tarea::findOrFail($request->tarea_id);
-
         $validator = Validator::make($request->all(), [
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'prioridad_id' => 'required',
         ]);
 
         if ($validator->fails()) {
-            // Si la validación falla, redirecciona o devuelve una respuesta con los errores
-            return redirect()->back()->with('error', 'Hay un eror en la fecha.');
+            return redirect()->back()->with('error', 'Se ha producido un error. Comprueba los datos.');
+        }
+
+        if($tarea_responsable_before != $request->responsable_id) {
+            $notificacion = new Notificacion;
+            $notificacion->message = __("$auth_user te ha asignado la tarea '$tarea->name'");
+            $notificacion->user_sender_id = auth()->user()->id;
+            $notificacion->read = 0;
+            $notificacion->user_receptor_id = $request->responsable_id;
+            $notificacion->project_id = $tarea->proyecto->id;
+            $notificacion->estado_notificacion_id = EstadoNotificacion::ESTADO_PRIVADA;
+            $notificacion->save();
         }
 
         $tarea->update($request->all());
@@ -67,6 +87,10 @@ class TareaController extends Controller
     }
 
     public function store(Request $request) {
+
+        if(!$request->prioridad_id) {
+            return redirect()->back()->with('error', 'El campo prioridad es obligatorio');
+        }
 
         $tarea = new Tarea;
         $tarea->name = $request->name;
@@ -78,7 +102,7 @@ class TareaController extends Controller
         $tarea->save();
         // $tarea->create($request->all());
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Tarea creada correctamente');
         
         
     }
@@ -123,7 +147,13 @@ class TareaController extends Controller
 
         // mandar mensaje de cuidado si el numero de horas es mayor a las asignadas
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Tarea actualizada correctamente');
 
+    }
+
+    public function destroy(Request $request, $proyecto_id, $tarea_id) {
+        Tarea::where('id', $tarea_id)->delete();
+
+        return redirect()->back()->with('success', 'Tarea eliminada correctamente');
     }
 }

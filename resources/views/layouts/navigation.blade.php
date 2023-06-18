@@ -22,6 +22,11 @@
 
                     <x-nav-link :href="route('notifications.index')" :active="request()->routeIs('notifications.index')">
                         {{ __('Notificaciones') }}
+                        {{-- @if(auth()->user()->notificationsSent || auth()->user()->notificationsReceived)
+                            <span class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
+                                {{ auth()->user()->getUnread() }}
+                            </span>
+                        @endif --}}
                     </x-nav-link>
 
                 @if (Request::is('proyectos/*'))
@@ -39,7 +44,7 @@
                     </button>
 
                     
-                    <button id="multiLevelDropdownButton" data-dropdown-toggle="dropdown" class="bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button">
+                    <button id="userDropdown" data-dropdown-toggle="dropdown" class="bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button">
                         <span class="flex items-center"> 
                             <i class="fas fa-user mr-1"></i> {{ __('Usuarios') }}
                             <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -52,18 +57,27 @@
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="multiLevelDropdownButton">
                             @foreach($proyecto->usuarios as $usuario)
                             <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $usuario->name }}</a>
+                                <p class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $usuario->name }}</p>
                             </li>
                             @endforeach
                         </ul>
                     </div>
 
-                    <button id="deleteProject" class="bg-red-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button" onclick="deleteProject()">
-                        <span class="flex items-center"> 
-                            <i class="fas fa-trash"></i> 
-                            <p class="ml-1">{{ __('Eliminar Proyecto') }} </p>
-                        </span>
-                    </button>
+                    @if($proyecto->admin->id == $auth_user)
+                        <button id="editProject" class="bg-blue-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button" data-modal-toggle="popup8">
+                            <span class="flex items-center"> 
+                                <i class="fas fa-trash"></i> 
+                                <p class="ml-1">{{ __('Editar Proyecto') }} </p>
+                            </span>
+                        </button>
+
+                        <button id="deleteProject" class="bg-red-500 text-white active:bg-blue-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-4 mt-4 ease-linearvtransition-all duration-150" type="button" data-modal-toggle="popup7">
+                            <span class="flex items-center"> 
+                                <i class="fas fa-trash"></i> 
+                                <p class="ml-1">{{ __('Eliminar Proyecto') }} </p>
+                            </span>
+                        </button>
+                    @endif
                 @endif
 
 
@@ -86,9 +100,9 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        {{-- <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
-                        </x-dropdown-link>
+                        </x-dropdown-link> --}}
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">

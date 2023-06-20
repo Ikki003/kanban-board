@@ -34,7 +34,7 @@
             </div>
         </div>
         <p class=" text-white">
-            Want to hire me for work ping me <a class="underline" href="mailto:ponnamkarthik3@gmail.com">mail here</a>
+            Want to hire me for work ping me <a class="underline" href="mailto:ilorentebillalva@gmail.com">mail here</a>
         </p>
     </div>
     </div>
